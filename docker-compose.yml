@@ -1,0 +1,41 @@
+version: '3'
+services:
+  nginx:
+    container_name: loadbalancer-nginx
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - "./nginx/proyect.conf:/etc/nginx/conf.d/default.conf"
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: 'proyect'
+      MYSQL_USER: 'frodo'
+      MYSQL_PASSWORD: 'bolson'
+      MYSQL_ROOT_PASSWORD: 'bolson'
+    ports:
+      - "3306"
+    volumes:
+      - ./myspl:/var/lib/mysql
+    restart: always
+    
+  web1:
+    image: tiqc/php-apache-mysqli
+    container_name: apache1
+    hostname: apache1
+    ports:
+      - "80"
+    volumes:
+      - ./apache:/var/www/html
+  
+  web2:
+    image: tiqc/php-apache-mysqli
+    container_name: apache2
+    hostname: apache2
+    ports:
+      - "80"
+    volumes:
+      - ./apache:/var/www/html
